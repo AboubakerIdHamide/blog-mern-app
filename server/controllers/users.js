@@ -20,7 +20,7 @@ export const getUserFriends= async (req, res) => {
         if(!user) return res.status(401).json({ msg:"User does not exist." });
 
         const friends= await Promise.all(
-            user?.friends.map( uId => User.findById(uId))
+            user.friends.map( uId => User.findById(uId))
         );
         const formattedFriends=friends.map((friend)=>{
             return {
@@ -48,19 +48,19 @@ export const addRemoveFriends = async (req, res)=>{
         if(!user) return res.status(401).json({ msg:"User does not exist." });
         if(!friend) return res.status(401).json({ msg:"User Friend does not exist." });
 
-        if(user?.friends.includes(friendId)){
-            user?.friends=user?.friends.filter(uId => uId!==friendId);
-            friend?.friends=friend?.friends.filter(fId => fId!==id);
+        if(user.friends.includes(friendId)){
+            user.friends=user.friends.filter(uId => uId!==friendId);
+            friend.friends=friend.friends.filter(fId => fId!==id);
         }else{
-            user?.friends.push(friendId);
-            friend?.friends.push(id);
+            user.friends.push(friendId);
+            friend.friends.push(id);
         }
 
         await user.save();
         await friend.save();
 
         const friends= await Promise.all(
-            user?.friends.map( uId => User.findById(uId))
+            user.friends.map( uId => User.findById(uId))
         );
 
         const formattedFriends=friends.map((friend)=>{
